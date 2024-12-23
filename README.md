@@ -1,10 +1,10 @@
-# WavePulse
+# WavePulse: Real-time Content Analytics of Radio Livestreams
 
 [Paper](https://arxiv.org/) | [Website](https://wave-pulse.io) | [Dataset - Raw](https://huggingface.co/datasets/nyu-dice-lab/wave-pulse-transcripts) | [Dataset - Summarized](https://huggingface.co/datasets/nyu-dice-lab/wave-pulse-transcripts)
 
-Track and analyze radio livestreams at scale
 
-![figure](/assets/pipeline.pdf)
+
+![figure](/assets/overview.png)
 
 ## Overview
 WavePulse is an end-to-end framework for recording, transcribing, and analyzing radio livestreams in real-time. It processes multiple concurrent audio streams into timestamped, speaker-diarized transcripts and enables content analysis through state-of-the-art AI models.
