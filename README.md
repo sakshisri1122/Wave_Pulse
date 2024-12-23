@@ -4,6 +4,8 @@
 
 Track and analyze radio livestreams at scale
 
+![figure](/assets/pipeline.pdf)
+
 ## Overview
 WavePulse is an end-to-end framework for recording, transcribing, and analyzing radio livestreams in real-time. It processes multiple concurrent audio streams into timestamped, speaker-diarized transcripts and enables content analysis through state-of-the-art AI models.
 
@@ -93,7 +95,7 @@ Basic recording and transcription only:
 ```bash
 python src/wavepulse.py --stop-classification
 ```
-All Parameters : 
+All Parameters : [ARGS.md](ARGS.md)
 
 ## Component Control
 Control individual components with these flags:
