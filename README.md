@@ -1,6 +1,6 @@
 # WavePulse: Real-time Content Analytics of Radio Livestreams
 
-[Paper](https://arxiv.org/) | [Website](https://wave-pulse.io) | [Dataset - Raw](https://huggingface.co/datasets/nyu-dice-lab/wavepulse-radio-raw-transcripts) | [Dataset - Summarized](
+[Paper](https://arxiv.org/abs/2412.17998) | [Website](https://wave-pulse.io) | [Dataset - Raw](https://huggingface.co/datasets/nyu-dice-lab/wavepulse-radio-raw-transcripts) | [Dataset - Summarized](
 https://huggingface.co/datasets/nyu-dice-lab/wavepulse-radio-summarized-transcripts)
 
 
