@@ -1,0 +1,15 @@
+.heading {
+  padding: '14px';
+  font: 'Arial, sans-serif';
+  font-size: 14px;
+  color:rgb(5, 39, 112);
+  margin: 20px;
+}
+
+.container {
+  display: 'flex';
+  gap: '1rem';
+  flex-wrap: 'wrap';
+  margin-bottom: '1rem';
+  color: rgb(196, 95, 95);
+}

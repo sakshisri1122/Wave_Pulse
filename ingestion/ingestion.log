@@ -1,0 +1,112 @@
+2025-06-26 11:24:19,143 [INFO] Ingestion job completed.
+2025-06-26 12:23:17,323 [INFO] Ingestion job completed.
+2025-06-26 12:29:49,027 [INFO] Ingestion job completed.
+2025-06-26 13:10:45,104 [INFO] Ingestion job completed.
+2025-06-26 13:18:08,198 [INFO] Ingestion job completed.
+2025-06-26 13:34:05,028 [INFO] Ingestion completed.
+2025-06-26 14:09:25,095 [INFO] Ingestion script complete.
+2025-06-26 14:25:59,852 [ERROR] Database connection failed: connection to server at "localhost" (::1), port 5432 failed: FATAL:  database "tb" does not exist
+
+2025-06-26 14:36:51,967 [INFO] Ingestion script complete.
+2025-06-26 14:50:06,533 [INFO] Ingestion script complete.
+2025-06-26 14:55:00,223 [INFO] Inserted 401 rows from MT_KAFH_2024_08_09_13_00.json
+2025-06-26 14:55:00,236 [INFO] Inserted 328 rows from GA_WRWH_2024_08_22_06_00.json
+2025-06-26 14:55:00,240 [INFO] Inserted 78 rows from HI_KANO_2024_07_07_14_00.json
+2025-06-26 14:55:00,245 [INFO] Inserted 73 rows from MI_WMIC_2024_07_20_18_30.json
+2025-06-26 14:55:00,259 [INFO] Inserted 424 rows from FL_WFTL_2024_08_04_05_32.json
+2025-06-26 14:55:00,267 [INFO] Inserted 81 rows from NV_KELY_2024_07_10_20_30.json
+2025-06-26 14:55:00,270 [INFO] Inserted 77 rows from AZ_KAWC_2024_06_27_20_15.json
+2025-06-26 14:55:00,285 [INFO] Inserted 504 rows from NY_WGDJ_2024_08_10_07_02.json
+2025-06-26 14:55:00,291 [INFO] Inserted 84 rows from MD_WFMD_2024_07_20_09_15.json
+2025-06-26 14:55:00,303 [INFO] Inserted 312 rows from IL_WTRH_2024_08_09_00_16.json
+2025-06-26 14:55:00,316 [INFO] Inserted 357 rows from MI_WKNW_2024_08_20_10_38.json
+2025-06-26 14:55:00,334 [INFO] Inserted 436 rows from WA_KNWN_2024_07_31_13_21.json
+2025-06-26 14:55:00,352 [INFO] Inserted 503 rows from MI_WKHM_2024_08_21_19_32.json
+2025-06-26 14:55:00,369 [INFO] Inserted 488 rows from FL_WXJB_2024_07_23_08_32.json
+2025-06-26 14:55:00,372 [INFO] Inserted 46 rows from OK_KQOB_2024_08_08_02_56.json
+2025-06-26 14:55:00,379 [INFO] Inserted 66 rows from NY_WTBQ_2024_07_21_08_32.json
+2025-06-26 14:55:00,384 [INFO] Inserted 83 rows from MD_WCBM_2024_07_10_08_02.json
+2025-06-26 14:55:00,387 [INFO] Inserted 75 rows from OH_WHTX_2024_07_01_11_35.json
+2025-06-26 14:55:00,397 [INFO] Inserted 383 rows from LA_KWLA_2024_08_14_09_28.json
+2025-06-26 14:55:00,409 [INFO] Inserted 398 rows from FL_WPIK_2024_08_23_14_00.json
+2025-06-26 14:55:00,425 [INFO] Inserted 488 rows from GA_WSBB_2024_08_14_05_32.json
+2025-06-26 14:55:00,437 [INFO] Inserted 327 rows from NY_WLNL_2024_08_20_19_30.json
+2025-06-26 14:55:00,443 [INFO] Inserted 78 rows from ID_KIDG_2024_07_11_01_18.json
+2025-06-26 14:55:00,448 [INFO] Inserted 73 rows from OH_WHTX_2024_06_28_23_24.json
+2025-06-26 14:55:00,465 [INFO] Inserted 316 rows from AK_KVNT_2024_08_07_21_26.json
+2025-06-26 14:55:00,481 [INFO] Inserted 416 rows from IL_WTRH_2024_08_20_13_30.json
+2025-06-26 14:55:00,486 [INFO] Inserted 78 rows from LA_KWLA_2024_07_10_20_30.json
+2025-06-26 14:55:00,492 [INFO] Inserted 78 rows from IN_WBIW_2024_07_10_20_30.json
+2025-06-26 14:55:00,512 [INFO] Inserted 512 rows from AZ_KVOI_2024_07_27_08_43.json
+2025-06-26 14:55:00,527 [INFO] Inserted 393 rows from FL_WNRP_2024_07_24_17_00.json
+2025-06-26 14:55:00,539 [INFO] Inserted 337 rows from NY_WBAI_2024_08_12_05_02.json
+2025-06-26 14:55:00,546 [INFO] Inserted 76 rows from MD_WFMD_2024_07_20_08_45.json
+2025-06-26 14:55:00,550 [INFO] Inserted 79 rows from MN_WZFG_2024_07_16_07_02.json
+2025-06-26 14:55:00,566 [INFO] Inserted 450 rows from TN_KWAM_2024_08_09_09_32.json
+2025-06-26 14:55:00,582 [INFO] Inserted 428 rows from GA_WSBB_2024_08_14_07_32.json
+2025-06-26 14:55:00,593 [INFO] Inserted 253 rows from FL_WWBA_2024_08_03_05_32.json
+2025-06-26 14:55:00,598 [INFO] Inserted 77 rows from NH_WEMJ_2024_07_07_15_00.json
+2025-06-26 14:55:00,613 [INFO] Inserted 375 rows from KY_WZXI_2024_08_20_13_41.json
+2025-06-26 14:55:00,618 [INFO] Inserted 79 rows from PA_WRTA_2024_07_20_14_30.json
+2025-06-26 14:55:00,624 [INFO] Inserted 80 rows from PA_WRSC_2024_07_20_14_30.json
+2025-06-26 14:55:00,630 [INFO] Inserted 80 rows from PA_WRTA_2024_07_10_20_31.json
+2025-06-26 14:55:00,648 [INFO] Inserted 450 rows from GA_WSBB_2024_08_14_06_32.json
+2025-06-26 14:55:00,653 [INFO] Inserted 135 rows from OR_KFIR_2024_08_22_08_30.json
+2025-06-26 14:55:00,666 [INFO] Inserted 377 rows from MI_WKHM_2024_07_29_06_02.json
+2025-06-26 14:55:00,670 [INFO] Inserted 79 rows from IL_WBGZ_2024_07_11_00_30.json
+2025-06-26 14:55:00,676 [INFO] Inserted 79 rows from MD_WFMD_2024_07_10_20_30.json
+2025-06-26 14:55:00,687 [INFO] Inserted 340 rows from MO_KRMS_2024_07_24_16_30.json
+2025-06-26 14:55:00,704 [INFO] Inserted 465 rows from KS_KQAM_2024_08_01_08_32.json
+2025-06-26 14:55:00,710 [INFO] Inserted 78 rows from KS_KIUL_2024_07_10_20_30.json
+2025-06-26 14:55:00,725 [INFO] Inserted 420 rows from MT_KAFH_2024_08_09_22_00.json
+2025-06-26 14:55:00,729 [INFO] Inserted 49 rows from DC_WPFM_2024_07_10_12_17.json
+2025-06-26 14:55:00,733 [INFO] Inserted 77 rows from AZ_KAWC_2024_06_27_18_15.json
+2025-06-26 14:55:00,737 [INFO] Inserted 84 rows from AZ_KAWC_2024_06_28_09_45.json
+2025-06-26 14:55:00,754 [INFO] Inserted 481 rows from TN_WCMT_2024_07_30_08_02.json
+2025-06-26 14:55:00,769 [INFO] Inserted 423 rows from NY_WUTQ_2024_08_07_15_56.json
+2025-06-26 14:55:00,775 [INFO] Inserted 81 rows from AK_KSRM_2024_07_11_02_19.json
+2025-06-26 14:55:00,781 [INFO] Inserted 79 rows from SD_KELQ_2024_07_10_23_30.json
+2025-06-26 14:55:00,791 [INFO] Inserted 302 rows from AK_KVNT_2024_07_31_21_25.json
+2025-06-26 14:55:00,805 [INFO] Inserted 388 rows from PA_WFYL_2024_07_26_21_30.json
+2025-06-26 14:55:00,821 [INFO] Inserted 439 rows from FL_WXJB_2024_08_04_06_32.json
+2025-06-26 14:55:00,837 [INFO] Inserted 415 rows from ND_KNOX_2024_08_02_06_02.json
+2025-06-26 14:55:00,844 [INFO] Inserted 78 rows from KS_KQAM_2024_07_10_20_31.json
+2025-06-26 14:55:00,850 [INFO] Inserted 78 rows from HI_KANO_2024_07_07_13_00.json
+2025-06-26 14:55:00,860 [INFO] Inserted 253 rows from FL_WHBO_2024_08_03_05_32.json
+2025-06-26 14:55:00,875 [INFO] Inserted 387 rows from MI_WMIC_2024_08_07_15_56.json
+2025-06-26 14:55:00,891 [INFO] Inserted 402 rows from NM_KOBE_2024_08_07_18_26.json
+2025-06-26 14:55:00,897 [INFO] Inserted 82 rows from AZ_KAWC_2024_06_28_11_45.json
+2025-06-26 14:55:00,902 [INFO] Inserted 77 rows from NH_WTSN_2024_07_07_15_00.json
+2025-06-26 14:55:00,909 [INFO] Inserted 79 rows from ID_KOUW_2024_07_11_01_18.json
+2025-06-26 14:55:00,928 [INFO] Inserted 501 rows from DE_WGMD_2024_08_21_08_30.json
+2025-06-26 14:55:00,948 [INFO] Inserted 509 rows from KS_KLWN_2024_08_21_19_32.json
+2025-06-26 14:55:00,964 [INFO] Inserted 405 rows from DE_WGMD_2024_08_12_11_02.json
+2025-06-26 14:55:00,984 [INFO] Inserted 512 rows from MI_WPHM_2024_08_21_19_32.json
+2025-06-26 14:55:01,002 [INFO] Inserted 422 rows from NY_WYSL_2024_08_07_15_56.json
+2025-06-26 14:55:01,016 [INFO] Inserted 397 rows from VA_WCHV_2024_08_08_06_02.json
+2025-06-26 14:55:01,067 [INFO] Inserted 498 rows from CO_KNFO_2024_08_21_19_32.json
+2025-06-26 14:55:01,078 [INFO] Inserted 380 rows from IL_WCPT_2024_08_07_05_02.json
+2025-06-26 14:55:01,091 [INFO] Inserted 400 rows from WA_KNWN_2024_07_31_14_21.json
+2025-06-26 14:55:01,100 [INFO] Inserted 385 rows from FL_WNRP_2024_07_24_19_00.json
+2025-06-26 14:55:01,105 [INFO] Inserted 82 rows from MI_WAAM_2024_07_10_22_30.json
+2025-06-26 14:55:01,124 [INFO] Inserted 604 rows from FL_WFTL_2024_08_08_07_32.json
+2025-06-26 14:55:01,135 [INFO] Inserted 434 rows from VA_WCHV_2024_08_08_07_32.json
+2025-06-26 14:55:01,138 [INFO] Inserted 78 rows from MI_WKHM_2024_07_18_07_32.json
+2025-06-26 14:55:01,141 [INFO] Inserted 78 rows from CT_WLAD_2024_07_10_20_30.json
+2025-06-26 14:55:01,144 [INFO] Inserted 78 rows from NE_KRGI_2024_07_11_00_16.json
+2025-06-26 14:55:01,154 [INFO] Inserted 418 rows from DE_WGMD_2024_08_09_11_02.json
+2025-06-26 14:55:01,164 [INFO] Inserted 429 rows from TN_WBFG_2024_08_07_15_56.json
+2025-06-26 14:55:01,171 [INFO] Inserted 330 rows from IL_WTRH_2024_08_08_12_00.json
+2025-06-26 14:55:01,174 [INFO] Inserted 76 rows from KY_WZXI_2024_07_20_14_33.json
+2025-06-26 14:55:01,189 [INFO] Inserted 475 rows from GA_WSBB_2024_08_14_08_32.json
+2025-06-26 14:55:01,204 [INFO] Inserted 522 rows from MO_KRTK_2024_08_02_17_30.json
+2025-06-26 14:55:01,209 [INFO] Inserted 78 rows from FL_WNZF_2024_07_14_08_02.json
+2025-06-26 14:55:01,226 [INFO] Inserted 499 rows from IL_WJPF_2024_08_24_13_30.json
+2025-06-26 14:55:01,231 [INFO] Inserted 83 rows from AZ_KAWC_2024_06_27_18_45.json
+2025-06-26 14:55:01,235 [INFO] Inserted 84 rows from GA_WRGA_2024_07_10_20_30.json
+2025-06-26 14:55:01,252 [INFO] Inserted 490 rows from MI_WKNW_2024_08_21_19_32.json
+2025-06-26 14:55:01,268 [INFO] Inserted 379 rows from AK_KVNT_2024_07_23_11_32.json
+2025-06-26 14:55:01,286 [INFO] Inserted 410 rows from FL_WNRP_2024_07_24_18_00.json
+2025-06-26 14:55:01,289 [INFO] Inserted 57 rows from DC_WPFM_2024_07_10_12_30.json
+2025-06-26 14:55:01,300 [INFO] Inserted 412 rows from VA_WCHV_2024_08_08_06_32.json
+2025-06-26 14:55:01,300 [INFO] Ingestion script complete.
