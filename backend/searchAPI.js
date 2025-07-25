@@ -1,112 +1,99 @@
-const express = require("express");
-const cors = require("cors");
-const { Pool } = require("pg");
-require("dotenv").config();
+const express = require('express');
+const cors = require('cors');
+const rateLimit = require('express-rate-limit');
+const { Pool } = require('pg');
+const morgan = require('morgan');
+require('dotenv').config();
 
 const app = express();
-const port = 2000;
+const port = process.env.PORT || 2000;
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  user: process.env.DB_USER || 'sakshisrivastava',
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_NAME || 'transcripts_db',
+  password: process.env.DB_PASSWORD || '',
+  port: process.env.DB_PORT || 5432
 });
 
 app.use(cors());
+app.use(express.json());
+app.use(morgan('dev'));
 
-function isInputSafe(input) {
-  const pattern = /^[\w\s|&()\-]+$/;
-  return pattern.test(input);
-}
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: "Too many requests, please try again later."
+});
 
-function filterMeaningfulWords(query) {
-  const stopwords = ["the", "is", "and", "or", "in", "on", "of", "to", "a"];
-  return query
-    .split(/\s+/)
-    .filter((word) => !stopwords.includes(word.toLowerCase()))
-    .join(" & ");
-}
+app.use(limiter);
 
-app.get("/search", async (req, res) => {
+app.get('/filters', async (req, res) => {
   try {
-    const {
-      q,
-      station,
-      state,
-      speaker,
-      date,
-      limit = 20,
-      offset = 0,
-    } = req.query;
-    let whereClauses = [];
-    const values = [];
-    let cleanQ = q;
-
-    if (q) {
-      if (!isInputSafe(q)) {
-        return res
-          .status(400)
-          .json({
-            error:
-              "Invalid search input. Only letters, numbers, and simple symbols are allowed.",
-          });
-      }
-      cleanQ = filterMeaningfulWords(q);
-      values.push(cleanQ);
-      whereClauses.push(`tsv @@ to_tsquery($${values.length})`);
-    }
-
-    if (station) {
-      values.push(station);
-      whereClauses.push(`station = $${values.length}`);
-    }
-
-    if (state) {
-      values.push(state);
-      whereClauses.push(`state = $${values.length}`);
-    }
-
-    if (speaker) {
-      values.push(speaker);
-      whereClauses.push(`speaker = $${values.length}`);
-    }
-
-    if (date) {
-      values.push(date);
-      whereClauses.push(`dt::date = $${values.length}`);
-    }
-
-    const whereClause =
-      whereClauses.length > 0 ? "WHERE " + whereClauses.join(" AND ") : "";
-    const cappedLimit = Math.min(parseInt(limit), 100);
-    const parsedOffset = parseInt(offset);
-
-    const countQuery = `SELECT COUNT(*) FROM transcripts ${whereClause}`;
-    const countResult = await pool.query(countQuery, values);
-
-    const rankClause = q ? ", ts_rank(tsv, to_tsquery($1)) AS rank" : "";
-
-    const searchQuery = `
-      SELECT id, station, dt AS datetime, speaker, text AS snippet${rankClause}
-      FROM transcripts
-      ${whereClause}
-      ORDER BY ${q ? "rank DESC," : ""} dt DESC
-      LIMIT $${values.length + 1} OFFSET $${values.length + 2}`;
-
-    values.push(cappedLimit);
-    values.push(parsedOffset);
-
-    const searchResult = await pool.query(searchQuery, values);
-
+    const statesRes = await pool.query('SELECT DISTINCT state FROM transcripts ORDER BY state');
+    const stationsRes = await pool.query('SELECT DISTINCT station FROM transcripts ORDER BY station');
     res.json({
-      count: parseInt(countResult.rows[0].count),
-      results: searchResult.rows,
+      states: statesRes.rows.map(r => r.state),
+      stations: stationsRes.rows.map(r => r.station)
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error fetching filter options:', err);
+    res.status(500).json({ error: 'Failed to load filter options' });
   }
 });
 
-module.exports = { app, pool };
+app.get('/search', async (req, res) => {
+  try {
+    const { q, station, state, speaker, startDate, endDate } = req.query;
+    const values = [];
+    const conditions = [];
+    let rankClause = '';
+
+    if (q) {
+      conditions.push(`tsv @@ plainto_tsquery('english', $${values.length + 1})`);
+      values.push(q);
+      rankClause = `, ts_rank(tsv, plainto_tsquery('english', $${values.length})) AS rank`;
+    }
+
+    if (station) {
+      conditions.push(`station = $${values.length + 1}`);
+      values.push(station);
+    }
+
+    if (state) {
+      conditions.push(`state = $${values.length + 1}`);
+      values.push(state);
+    }
+
+    if (speaker) {
+      conditions.push(`speaker = $${values.length + 1}`);
+      values.push(speaker);
+    }
+
+    if (startDate && endDate) {
+      conditions.push(`DATE(dt) BETWEEN $${values.length + 1} AND $${values.length + 2}`);
+      values.push(startDate);
+      values.push(endDate);
+    }
+
+    const whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+    const query = `
+      SELECT id, station, dt AS datetime, speaker, text AS snippet${rankClause}
+      FROM transcripts
+      ${whereClause}
+      ORDER BY dt DESC
+      LIMIT 100
+    `;
+
+    const result = await pool.query(query, values);
+    res.json({ count: result.rows.length, results: result.rows });
+  } catch (err) {
+    console.error('Search error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
