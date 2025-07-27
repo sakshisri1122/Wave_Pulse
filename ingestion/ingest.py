@@ -60,7 +60,7 @@ def extract_metadata(filename):
 def load_checkpoint():
     if os.path.exists(CHECKPOINT_FILE):
         with open('checkpoint.txt', 'a') as f:
-            print("✔ Writing to:", os.path.abspath('checkpoint.txt'))
+            print("Writing to:", os.path.abspath('checkpoint.txt'))
 
             return set(f.read().splitlines())
     return set()
@@ -69,7 +69,7 @@ def load_checkpoint():
 #Appends a file to the checkpoint log once successfully ingested
 def save_checkpoint(filename):
    with open('checkpoint.txt', 'a') as f:
-    print("✔ Writing to:", os.path.abspath('checkpoint.txt'))
+    print("Writing to:", os.path.abspath('checkpoint.txt'))
     f.write(filename + '\n')
 
 #parses and ingests one JSON file worth of transcript data
