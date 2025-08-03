@@ -1,53 +1,45 @@
 import os
 import json
-import logging
 import re
+import time
 from datetime import datetime
 from pathlib import Path
-import time
-import click
+import argparse
 import psycopg2
 from psycopg2 import extras
+from loguru import logger
 
-#File to track processed files
-CHECKPOINT_FILE = "checkpoint.txt" 
-#How many times to retry a failed insert
-MAX_RETRIES = 4        
-#Seconds to wait between retries     
-RETRY_DELAY = 2              
-#Number of rows to insert at once per batch
-BATCH_INSERT_SIZE = 1000         
+DEFAULT_CHECKPOINT = "checkpoint.txt"
+DEFAULT_BATCH_SIZE = 1000
+MAX_RETRIES = 4
+RETRY_DELAY = 2
 
-#Logging
-logging.basicConfig(
-    filename='ingestion.log',
-    level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s'
-)
-
-#Establishes and returns a connection to the PostgreSQL database
 def get_connection():
+    """Establish and return a PostgreSQL database connection."""
     return psycopg2.connect(
-        dbname='transcripts_db',
-        user='sakshisrivastava', 
-        password='',
-        host='localhost',
-        port='5432'
+        dbname=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        sslmode=os.getenv("SSL_MODE")
     )
 
-#formats speaker name and removes extra whitespace
 def normalize_speaker(speaker):
+    """Normalize the speaker field or return 'Unknown'."""
     return speaker.strip() if speaker else 'Unknown'
 
 def text_cleaning(text):
+    """Clean extra whitespace from transcript text."""
     return re.sub(r'\s+', ' ', text.strip()) if text else None
-#checks whether the JSON segment has required fields
+
 def validate_segment(segment):
+    """Check if a transcript segment contains required keys."""
     required = ['start', 'end', 'text']
     return all(k in segment for k in required)
 
-#extracts state, station, and datetime from filename
 def extract_metadata(filename):
+    """Extract state, station, and datetime from filename."""
     pattern = r'^([A-Z]{2})_([A-Z0-9]+)_(\d{4})_(\d{2})_(\d{2})_(\d{2})_(\d{2})\.json$'
     match = re.match(pattern, filename)
     if not match:
@@ -56,41 +48,37 @@ def extract_metadata(filename):
     dt = datetime(int(y), int(m), int(d), int(H), int(M))
     return state, station, dt
 
-#Loads the names of files already ingested from a checkpoint file
-def load_checkpoint():
-    if os.path.exists(CHECKPOINT_FILE):
-        with open('checkpoint.txt', 'a') as f:
-            print("Writing to:", os.path.abspath('checkpoint.txt'))
-
+def load_checkpoint(path):
+    """Load checkpoint file to skip already-ingested files."""
+    if os.path.exists(path):
+        with open(path, 'r') as f:
             return set(f.read().splitlines())
     return set()
 
+def save_checkpoint(path, filename):
+    """Append processed file name to the checkpoint file."""
+    with open(path, 'a') as f:
+        logger.info(f"Writing to: {os.path.abspath(path)}")
+        f.write(filename + '\n')
 
-#Appends a file to the checkpoint log once successfully ingested
-def save_checkpoint(filename):
-   with open('checkpoint.txt', 'a') as f:
-    print("Writing to:", os.path.abspath('checkpoint.txt'))
-    f.write(filename + '\n')
-
-#parses and ingests one JSON file worth of transcript data
-def process_file(filepath, conn):
-    print(f"Processing file: {filepath.name}")
+def process_file(filepath, conn, batch_size):
+    """Process one JSON transcript file and insert its segments into the database."""
+    logger.info(f"Processing file: {filepath.name}")
     try:
         state, station, dt = extract_metadata(filepath.name)
     except ValueError as e:
-        logging.error(str(e))
+        logger.error(str(e))
         return False
 
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             data = json.load(f)
     except Exception as e:
-        logging.error(f"Failed to parse {filepath.name}: {e}")
+        logger.error(f"Failed to parse {filepath.name}: {e}")
         return False
 
     segments = data if isinstance(data, list) else data.get('segments', [])
     rows = []
-
     for segment in segments:
         if not validate_segment(segment):
             continue
@@ -98,7 +86,7 @@ def process_file(filepath, conn):
             station,
             state,
             dt,
-            speaker_normalization(segment.get('speaker')),
+            normalize_speaker(segment.get('speaker')),
             float(segment['start']),
             float(segment['end']),
             text_cleaning(segment['text'])
@@ -107,9 +95,8 @@ def process_file(filepath, conn):
     if not rows:
         return False
 
-    #Insert in chunks to avoid memory overload and transaction limits
-    for i in range(0, len(rows), BATCH_INSERT_SIZE):
-        chunk = rows[i:i + BATCH_INSERT_SIZE]
+    for i in range(0, len(rows), batch_size):
+        chunk = rows[i:i + batch_size]
         for attempt in range(1, MAX_RETRIES + 1):
             try:
                 with conn.cursor() as cur:
@@ -123,38 +110,46 @@ def process_file(filepath, conn):
                         chunk
                     )
                 conn.commit()
-                break 
+                break
             except Exception as e:
                 conn.rollback()
-                logging.error(f"Retry {attempt} failed for {filepath.name}: {e}")
+                logger.error(f"Retry {attempt} failed for {filepath.name}: {e}")
                 time.sleep(RETRY_DELAY)
                 if attempt == MAX_RETRIES:
                     return False
 
-    logging.info(f"Inserted {len(rows)} rows from {filepath.name}")
+    logger.success(f"Inserted {len(rows)} rows from {filepath.name}")
     return True
 
-#Ingestion
-@click.command()
-@click.option('--samples-dir', default='sample_json', help='Path to your JSON files')
-def main(samples_dir):
+def main():
+    """Main entry point to handle CLI options and start the ingestion process."""
+    parser = argparse.ArgumentParser(description="Transcript ingestion script")
+    parser.add_argument('--samples-dir', type=str, default='sample_json', help='Path to your JSON files')
+    parser.add_argument('--checkpoint-file', type=str, default=DEFAULT_CHECKPOINT, help='Checkpoint filename')
+    parser.add_argument('--batch-size', type=int, default=DEFAULT_BATCH_SIZE, help='Batch size for inserts')
+    args = parser.parse_args()
+
     try:
         conn = get_connection()
     except Exception as e:
-        logging.error(f"Database connection failed: {e}")
+        logger.critical(f"Database connection failed: {e}")
         return
 
-    processed_files = load_checkpoint()
-    all_files = sorted([f for f in Path(samples_dir).glob('*.json') if f.name not in processed_files])
+    processed_files = load_checkpoint(args.checkpoint_file)
 
-    print(f"Starting ingestion for {len(all_files)} new file(s)")
+    logger.info(f"Sample dir resolved to: {args.samples_dir}")
+    logger.info(f"Files found: {[f.name for f in Path(args.samples_dir).glob('*.json')]}")
+    logger.info(f"Already processed: {list(processed_files)}")
+
+    all_files = sorted([f for f in Path(args.samples_dir).glob('*.json') if f.name not in processed_files])
+    logger.info(f"Starting ingestion for {len(all_files)} new file(s)")
 
     for filepath in all_files:
-        if process_file(filepath, conn):
-            save_checkpoint(filepath.name)
+        if process_file(filepath, conn, args.batch_size):
+            save_checkpoint(args.checkpoint_file, filepath.name)
 
     conn.close()
-    print("Ingestion is complete.")
+    logger.success("Ingestion complete.")
 
 if __name__ == '__main__':
     main()
