@@ -6,7 +6,7 @@ const { Parser } = require("json2csv");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 2000;
+const port = process.env.PORT || 8080;
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -38,7 +38,6 @@ function safeErrorHandler(err, req, res, next) {
 }
 // Health check endpoint for uptime monitoring
 app.get("/health", (req, res) => res.status(200).send("OK"));
-
 
 app.get("/filters", async (req, res) => {
   try {
