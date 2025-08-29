@@ -480,7 +480,9 @@ app.post("/export_csv", async (req, res) => {
     res.json({ answer: output.trim() });
   });
 });*/
-app.use(safeErrorHandler); // Use after all routes
+app.use(safeErrorHandler); 
+
+console.log("Initializing server...");
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
