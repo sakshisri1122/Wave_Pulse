@@ -23,6 +23,23 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
+// Enforce HTTPS in production
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === "production" && req.headers["x-forwarded-proto"] !== "https") {
+    return res.redirect("https://" + req.headers.host + req.url);
+  }
+  next();
+});
+
+// Strip stack traces from production responses
+function safeErrorHandler(err, req, res, next) {
+  console.error("Server Error:", err); // logs stack internally
+  res.status(500).json({ error: "An unexpected error occurred." }); // generic error to client
+}
+// Health check endpoint for uptime monitoring
+app.get("/health", (req, res) => res.status(200).send("OK"));
+
+
 app.get("/filters", async (req, res) => {
   try {
     const statesRes = await pool.query(
@@ -41,7 +58,23 @@ app.get("/filters", async (req, res) => {
   }
 });
 
-app.get("/search", async (req, res) => {
+// Validate dateRanges query param
+function validateDateRanges(req, res, next) {
+  try {
+    const dateRanges = JSON.parse(req.query.dateRanges || "[]");
+    if (
+      !Array.isArray(dateRanges) ||
+      !dateRanges.every(range => typeof range.from === "string" && typeof range.to === "string")
+    ) {
+      return res.status(400).json({ error: "Invalid dateRanges format. Expected array of { from, to }." });
+    }
+    next();
+  } catch {
+    return res.status(400).json({ error: "Malformed dateRanges JSON." });
+  }
+}
+
+app.get("/search", validateDateRanges, async (req, res) => {
   const client = await pool.connect();
   try {
     let {
@@ -448,6 +481,7 @@ app.post("/export_csv", async (req, res) => {
     res.json({ answer: output.trim() });
   });
 });*/
+app.use(safeErrorHandler); // Use after all routes
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
