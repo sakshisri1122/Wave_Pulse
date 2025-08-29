@@ -25,7 +25,11 @@ app.use(morgan("dev"));
 
 // Enforce HTTPS in production
 app.use((req, res, next) => {
-  if (process.env.NODE_ENV === "production" && req.headers["x-forwarded-proto"] !== "https") {
+  if (
+    process.env.NODE_ENV === "production" &&
+    req.headers["x-forwarded-proto"] !== "https" &&
+    req.path !== "/health"
+  ) {
     return res.redirect("https://" + req.headers.host + req.url);
   }
   next();
